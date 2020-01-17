@@ -4,7 +4,7 @@ const fs = require("fs")
 const inquirer = require("inquirer")
 const util = require("util")
 const axios = require("axios")
-const generatehtml = require("./Assets/generatehtml.js")
+const generateHTML = require("./Assets/generateHTML.js")
 const writeFilesAsync = util.promisify(fs.writeFile)
 const readFileAsync = util.promisify(fs.readFile)
 const htmlPdf = require("html-pdf")
@@ -31,21 +31,26 @@ function promptUser() {
       type: "input",
       name: "github",
       message: "What is your github username?"
+    },
+    {
+      type: "list",
+      name: "color",
+      choices: ["green", "blue", "pink", "red"]
     }
   ])
 }
 
 //pushing the users input into a variable for pdf/errors
 
-promptUser()
-  .then(function(answers) {
-    const pdf = generatePdf(answers)
+//promptUser()
+//.then(function(answers) {
+//const pdf = generatePdf(answers)
 
-    return
-  })
-  .catch(function(err) {
-    console.log(err)
-  })
+//return
+//})
+//.catch(function(err) {
+//console.log(err)
+//})
 
 //function for command line
 
