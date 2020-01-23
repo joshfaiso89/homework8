@@ -4,9 +4,9 @@ const fs = require("fs")
 const inquirer = require("inquirer")
 const util = require("util")
 const axios = require("axios")
-const generateHTML = require("./Assets/generateHTML.js")
+const generateHTML2 = require("./Assets/generateHTML2.js", "utf8")
 const writeFilesAsync = util.promisify(fs.writeFile)
-const readFileAsync = util.promisify(fs.readFile)
+//const readFileAsync = util.promisify(fs.readFile)
 const htmlPdf = require("html-pdf")
 const userinput = {
   format: "Letter",
@@ -42,16 +42,6 @@ function promptUser() {
 
 //pushing the users input into a variable for pdf/errors
 
-//promptUser()
-//.then(function(answers) {
-//const pdf = generatePdf(answers)
-
-//return
-//})
-//.catch(function(err) {
-//console.log(err)
-//})
-
 //function for command line
 
 async function initialize() {
@@ -59,8 +49,8 @@ async function initialize() {
     //storing answers from inquirer
     const answers = await promptUser()
     //using Inquirer answers to make api calls
-    const queryURL = `https://api.github.com/users/&${answers.github}`
-    const queryURLStar = `https://api.github.com/uses/&${answers.github}/starred`
+    const queryURL = `https://api.github.com/users/${answers.github}`
+    const queryURLStar = `https://api.github.com/uses/${answers.github}/starred`
 
     //Making API calls with axios from above info
     const profile = await axios.get(queryURL)
@@ -77,14 +67,14 @@ async function initialize() {
     //console.log(data)
 
     //calling in seperate js file for the html-pdf
-    const html = generatehtml(data)
+    const html = generateHTML2(data)
 
     await writeFilesAsync(`./assets/${answers.username}.html`, html)
     console.log("success!")
 
     //html-pdf time!!!!
     htmlPdf
-      .create(html, userinput)
+      .create(html, options)
       .toFile(`.assets/pdf/${answers.username}.pdf`, function(err, res) {
         if (err) {
           console.log(err)
@@ -96,4 +86,4 @@ async function initialize() {
   }
 }
 
-initialize()
+initialize(userinput)
